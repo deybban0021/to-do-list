@@ -46,7 +46,7 @@
       gap: 10px;
       justify-content: space-between;
     }
-    input {
+    input#taskInput {
       flex: 1;
       padding: 12px;
       border: 1px solid #555;
@@ -86,13 +86,12 @@
       border: 1px solid #555;
       transition: 0.3s;
     }
-    /* Ensure the checkbox container takes available space */
     .checkbox-container {
       display: flex;
       align-items: center;
       gap: 10px;
       flex: 1;
-      min-width: 0; /* Allow shrinking so the text wraps only when needed */
+      min-width: 0; /* Allows text to shrink before wrapping */
     }
     .task-text {
       flex: 1;
@@ -137,7 +136,11 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", loadTasks);
+    document.addEventListener("DOMContentLoaded", () => {
+      loadTasks();
+      loadTitle();
+      document.getElementById("taskTitle").addEventListener("blur", saveTitle);
+    });
 
     function addTask() {
       let taskText = document.getElementById("taskInput").value.trim();
@@ -187,6 +190,7 @@
     function loadTasks() {
       let savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
       let taskList = document.getElementById("taskList");
+      taskList.innerHTML = ""; // Clear the list
 
       savedTasks.forEach((task) => {
         let li = document.createElement("li");
@@ -199,6 +203,25 @@
         `;
         taskList.appendChild(li);
       });
+    }
+
+    // Save and load the task title
+    function saveTitle() {
+      let title = document.getElementById("taskTitle").value.trim();
+      localStorage.setItem("taskTitle", title);
+      if(title !== "") {
+        document.querySelector("h2").innerText = title;
+      } else {
+        document.querySelector("h2").innerText = "To-Do List";
+      }
+    }
+
+    function loadTitle() {
+      let storedTitle = localStorage.getItem("taskTitle");
+      if (storedTitle) {
+        document.getElementById("taskTitle").value = storedTitle;
+        document.querySelector("h2").innerText = storedTitle;
+      }
     }
   </script>
 </body>
