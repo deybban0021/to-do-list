@@ -139,6 +139,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       loadTasks();
       loadTitle();
+      // Save the title when the input loses focus.
       document.getElementById("taskTitle").addEventListener("blur", saveTitle);
     });
 
@@ -190,7 +191,7 @@
     function loadTasks() {
       let savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
       let taskList = document.getElementById("taskList");
-      taskList.innerHTML = ""; // Clear the list
+      taskList.innerHTML = ""; // Clear any existing tasks.
 
       savedTasks.forEach((task) => {
         let li = document.createElement("li");
@@ -205,22 +206,17 @@
       });
     }
 
-    // Save and load the task title
+    // Store the Task Title without updating the header.
     function saveTitle() {
       let title = document.getElementById("taskTitle").value.trim();
       localStorage.setItem("taskTitle", title);
-      if(title !== "") {
-        document.querySelector("h2").innerText = title;
-      } else {
-        document.querySelector("h2").innerText = "To-Do List";
-      }
     }
 
+    // Load the Task Title value into the input field.
     function loadTitle() {
       let storedTitle = localStorage.getItem("taskTitle");
       if (storedTitle) {
         document.getElementById("taskTitle").value = storedTitle;
-        document.querySelector("h2").innerText = storedTitle;
       }
     }
   </script>
