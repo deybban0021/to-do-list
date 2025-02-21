@@ -19,7 +19,7 @@
     .container {
       width: 90%;
       max-width: 450px;
-      background: #000000; /* Changed to black */
+      background: #000000; /* Black container */
       padding: 25px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
@@ -86,21 +86,25 @@
       border: 1px solid #555;
       transition: 0.3s;
     }
+    /* Ensure the checkbox container takes available space */
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 0; /* Allow shrinking so the text wraps only when needed */
+    }
     .task-text {
       flex: 1;
       font-size: 16px;
       transition: color 0.3s, text-decoration 0.3s;
+      overflow-wrap: break-word;
     }
     .task-text.completed {
       text-decoration: line-through;
       color: #e91e63; /* Pink */
       opacity: 0.7;
       transition: all 0.3s ease;
-    }
-    .checkbox-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
     .checkbox {
       cursor: pointer;
