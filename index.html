@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Static To-Do List</title>
+  <title>Enhanced To-Do List</title>
   <!-- Google Fonts for refined typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   <style>
     /* Overall Page Styling */
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #1e1e1e, #323232);
+      background: #1e1e1e;
       color: #fff;
       display: flex;
       align-items: center;
@@ -24,20 +25,93 @@
 
     /* Container Styling */
     .container {
-      background: #111;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-      padding: 30px 40px;
-      max-width: 500px;
+      background: rgba(15, 15, 20, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 5px 15px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      max-width: 550px;
       width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    /* Glow effect */
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #ff00cc, #3333ff, #00ccff, #33ff33);
+      z-index: -1;
+      background-size: 400% 400%;
+      animation: glowing 20s linear infinite;
+      border-radius: 26px;
+      opacity: 0.4;
+    }
+
+    @keyframes glowing {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     /* Header Styling */
-    h2 {
-      margin-bottom: 20px;
+    .header {
+      position: relative;
+      margin-bottom: 35px;
       text-align: center;
-      font-size: 2rem;
-      color: #ff69b4; /* Pink accent */
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 2.5rem;
+      background: linear-gradient(45deg, #ff69b4, #b180ff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(255, 105, 180, 0.2);
+      position: relative;
+      display: inline-block;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #ff69b4, transparent);
+      border-radius: 3px;
+    }
+
+    .progress-container {
+      margin: 20px auto 30px;
+      width: 80%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #3498db, #ff69b4);
+      border-radius: 10px;
+      transform-origin: left;
+      animation: fill 1.5s ease-out forwards;
+    }
+
+    @keyframes fill {
+      0% { transform: scaleX(0); }
+      100% { transform: scaleX(1); }
     }
 
     /* List Styling */
@@ -45,106 +119,259 @@
       list-style: none;
       padding: 0;
       margin: 0;
+      counter-reset: todo-counter;
     }
 
     li {
-      background: #222;
-      margin-bottom: 15px;
-      padding: 15px;
-      border-radius: 10px;
+      background: rgba(40, 44, 52, 0.7);
+      margin-bottom: 20px;
+      padding: 20px;
+      border-radius: 16px;
       display: flex;
-      align-items: center;
-      transition: transform 0.2s ease, background 0.2s ease;
+      align-items: flex-start; /* Changed from center to allow proper wrapping */
+      border-left: 4px solid #3498db;
+      position: relative;
+      counter-increment: todo-counter;
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeInUp 0.5s forwards;
+      animation-delay: calc(0.1s * var(--i));
     }
 
-    li:hover {
-      transform: translateX(5px);
-      background: #333;
+    li::before {
+      content: counter(todo-counter);
+      position: absolute;
+      left: -15px;
+      top: 20px; /* Adjusted to align with first line */
+      transform: translateY(0);
+      width: 28px;
+      height: 28px;
+      background: #3498db;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #111;
+      box-shadow: 0 3px 8px rgba(52, 152, 219, 0.5);
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Task Icon Styling */
     .task-icon {
-      margin-right: 15px;
-      font-size: 1.2rem;
-      color: #3498db; /* Blue accent */
+      margin-right: 18px;
+      font-size: 1.5rem;
+      color: #3498db;
+      width: 40px;
+      height: 40px;
+      background: rgba(52, 152, 219, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      flex-shrink: 0; /* Prevent icon from shrinking */
+      margin-top: 5px; /* Align icon with text */
     }
 
     /* Task Text Styling */
     .task-text {
-      font-size: 1rem;
+      font-size: 1.05rem;
       flex: 1;
-      line-height: 1.4;
+      line-height: 1.5;
+      transition: color 0.2s ease;
+    }
+
+    .task-text strong {
+      color: #e6e6e6;
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      font-size: 1.1rem;
     }
 
     .task-text a {
       color: #3498db;
       text-decoration: none;
-      border-bottom: 1px dashed #3498db;
-      transition: color 0.2s ease;
+      border-bottom: 1px dashed rgba(52, 152, 219, 0.5);
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      padding: 2px 4px;
+      position: relative;
+      z-index: 1;
+      display: inline;
+      word-break: break-all; /* Allow breaking within words if needed */
+      overflow-wrap: break-word; /* Modern way to handle text wrapping */
+      hyphens: auto; /* Add hyphens when breaking words if needed */
+      max-width: 100%;
+    }
+
+    .task-text a::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      left: 0;
+      right: 100%;
+      bottom: 0;
+      background: rgba(52, 152, 219, 0.15);
+      height: 100%;
+      transition: right 0.3s ease;
     }
 
     .task-text a:hover {
       color: #ff69b4;
-      border-bottom: 1px solid #ff69b4;
+      border-bottom: 1px solid rgba(255, 105, 180, 0.7);
+    }
+
+    .task-text a:hover::before {
+      right: 0;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .footer span {
+      background: linear-gradient(45deg, #ff69b4, #3498db);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      font-weight: 500;
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 25px;
+      }
+      
+      h2 {
+        font-size: 2rem;
+      }
+      
+      li {
+        padding: 15px;
+      }
+      
+      .task-text {
+        font-size: 0.95rem;
+      }
+      
+      .task-text strong {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 25px 20px;
+      }
+      
+      h2 {
+        font-size: 1.8rem;
+      }
+      
+      .task-icon {
+        margin-right: 12px;
+        width: 32px;
+        height: 32px;
+        font-size: 1.2rem;
+      }
+      
+      .task-text a {
+        font-size: 0.8rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>To-Do List</h2>
+    <div class="header">
+      <h2>To-Do List</h2>
+      <div class="progress-container">
+        <div class="progress-bar"></div>
+      </div>
+    </div>
     <ul>
-      <li>
-        <span class="task-icon">✓</span>
+      <li style="--i:1">
+        <div class="task-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
         <span class="task-text">
-          <strong>Sign up for Skool:</strong>
+          <strong>Sign up for Skool</strong>
           <a href="https://www.skool.com/legacylink/about?ref=660035f641d94e3a919e081e220ed6fe" target="_blank" rel="noopener noreferrer">
             https://www.skool.com/legacylink/about?ref=660035f641d94e3a919e081e220ed6fe
           </a>
         </span>
       </li>
-      <li>
-        <span class="task-icon">✓</span>
+      <li style="--i:2">
+        <div class="task-icon">
+          <i class="fas fa-film"></i>
+        </div>
         <span class="task-text">
-          <strong>Watch Mindset Video "Whatever It Takes":</strong>
+          <strong>Watch Mindset Video "Whatever It Takes"</strong>
           <a href="https://www.youtube.com/watch?v=SVvU9SvCH9o" target="_blank" rel="noopener noreferrer">
             https://www.youtube.com/watch?v=SVvU9SvCH9o
           </a>
         </span>
       </li>
-      <li>
-        <span class="task-icon">✓</span>
+      <li style="--i:3">
+        <div class="task-icon">
+          <i class="fab fa-youtube"></i>
+        </div>
         <span class="task-text">
-          <strong>Subscribe to our YouTube Channel:</strong>
+          <strong>Subscribe to our YouTube Channel</strong>
           <a href="https://www.youtube.com/@TheLegacyLink" target="_blank" rel="noopener noreferrer">
             https://www.youtube.com/@TheLegacyLink
           </a>
         </span>
       </li>
-      <li>
-        <span class="task-icon">✓</span>
+      <li style="--i:4">
+        <div class="task-icon">
+          <i class="fas fa-file-signature"></i>
+        </div>
         <span class="task-text">
           <strong>Get Contracted (if licensed)</strong>
         </span>
       </li>
-      <li>
-        <span class="task-icon">✓</span>
+      <li style="--i:5">
+        <div class="task-icon">
+          <i class="fas fa-clipboard-check"></i>
+        </div>
         <span class="task-text">
           <strong>Complete Onboarding Process</strong>
         </span>
       </li>
-      <li>
-        <span class="task-icon">✓</span>
+      <li style="--i:6">
+        <div class="task-icon">
+          <i class="fas fa-bullseye"></i>
+        </div>
         <span class="task-text">
           <strong>Start Receiving Leads</strong>
         </span>
       </li>
-      <li>
-        <span class="task-icon">✓</span>
+      <li style="--i:7">
+        <div class="task-icon">
+          <i class="fas fa-running"></i>
+        </div>
         <span class="task-text">
           <strong>Go through the Seven-Day Sales Training Sprint</strong>
         </span>
       </li>
     </ul>
+    <div class="footer">
+      
+    </div>
   </div>
 </body>
 </html>
