@@ -10,12 +10,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   <style>
+    :root {
+      --primary-color: #ffffff;
+      --secondary-color: #1a73e8; /* Blue accent */
+      --accent-color: #1a73e8;    /* Blue accent */
+      --widget-bg: #0f0f1a;       /* Container background */
+      --item-bg: rgba(15, 15, 20, 0.9); /* Item background */
+      --body-bg: #0a0a0a;         /* Body background */
+    }
+    
     /* Overall Page Styling */
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: #1e1e1e;
-      color: #fff;
+      background: var(--body-bg);
+      color: var(--primary-color);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -25,7 +34,7 @@
 
     /* Container Styling */
     .container {
-      background: rgba(15, 15, 20, 0.9);
+      background: var(--widget-bg);
       backdrop-filter: blur(10px);
       border-radius: 24px;
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 5px 15px rgba(0, 0, 0, 0.3);
@@ -36,7 +45,7 @@
       position: relative;
     }
     
-    /* Glow effect */
+    /* Glow effect with blue radial glow */
     .container::before {
       content: '';
       position: absolute;
@@ -44,18 +53,10 @@
       left: -2px;
       right: -2px;
       bottom: -2px;
-      background: linear-gradient(45deg, #ff00cc, #3333ff, #00ccff, #33ff33);
+      background: radial-gradient(circle, rgba(26,115,232,0.5), transparent);
       z-index: -1;
-      background-size: 400% 400%;
-      animation: glowing 20s linear infinite;
       border-radius: 26px;
       opacity: 0.4;
-    }
-
-    @keyframes glowing {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
 
     /* Header Styling */
@@ -68,13 +69,13 @@
     h2 {
       margin: 0;
       font-size: 2.5rem;
-      background: linear-gradient(45deg, #ff69b4, #b180ff);
+      background: linear-gradient(45deg, #1a73e8, #ff4081);
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
       font-weight: 700;
       letter-spacing: 1px;
-      text-shadow: 0 0 10px rgba(255, 105, 180, 0.2);
+      text-shadow: 0 0 10px rgba(26,115,232,0.2);
       position: relative;
       display: inline-block;
     }
@@ -87,7 +88,7 @@
       transform: translateX(-50%);
       width: 50%;
       height: 3px;
-      background: linear-gradient(90deg, transparent, #ff69b4, transparent);
+      background: linear-gradient(90deg, transparent, #ff4081, transparent);
       border-radius: 3px;
     }
 
@@ -103,7 +104,7 @@
     .progress-bar {
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, #3498db, #ff69b4);
+      background: linear-gradient(90deg, #1a73e8, #ff4081);
       border-radius: 10px;
       transform-origin: left;
       animation: fill 1.5s ease-out forwards;
@@ -123,13 +124,13 @@
     }
 
     li {
-      background: rgba(40, 44, 52, 0.7);
+      background: var(--item-bg);
       margin-bottom: 20px;
       padding: 20px;
       border-radius: 16px;
       display: flex;
-      align-items: flex-start; /* Changed from center to allow proper wrapping */
-      border-left: 4px solid #3498db;
+      align-items: flex-start;
+      border-left: 4px solid var(--secondary-color);
       position: relative;
       counter-increment: todo-counter;
       transform: translateY(20px);
@@ -142,11 +143,10 @@
       content: counter(todo-counter);
       position: absolute;
       left: -15px;
-      top: 20px; /* Adjusted to align with first line */
-      transform: translateY(0);
+      top: 20px;
       width: 28px;
       height: 28px;
-      background: #3498db;
+      background: var(--secondary-color);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -154,7 +154,7 @@
       font-size: 0.8rem;
       font-weight: bold;
       color: #111;
-      box-shadow: 0 3px 8px rgba(52, 152, 219, 0.5);
+      box-shadow: 0 3px 8px rgba(26,115,232,0.5);
     }
 
     @keyframes fadeInUp {
@@ -168,17 +168,17 @@
     .task-icon {
       margin-right: 18px;
       font-size: 1.5rem;
-      color: #3498db;
+      color: var(--secondary-color);
       width: 40px;
       height: 40px;
-      background: rgba(52, 152, 219, 0.15);
+      background: rgba(26,115,232,0.15);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      flex-shrink: 0; /* Prevent icon from shrinking */
-      margin-top: 5px; /* Align icon with text */
+      flex-shrink: 0;
+      margin-top: 5px;
     }
 
     /* Task Text Styling */
@@ -198,18 +198,18 @@
     }
 
     .task-text a {
-      color: #3498db;
+      color: var(--secondary-color);
       text-decoration: none;
-      border-bottom: 1px dashed rgba(52, 152, 219, 0.5);
+      border-bottom: 1px dashed rgba(26,115,232,0.5);
       transition: all 0.3s ease;
       font-size: 0.9rem;
       padding: 2px 4px;
       position: relative;
       z-index: 1;
       display: inline;
-      word-break: break-all; /* Allow breaking within words if needed */
-      overflow-wrap: break-word; /* Modern way to handle text wrapping */
-      hyphens: auto; /* Add hyphens when breaking words if needed */
+      word-break: break-all;
+      overflow-wrap: break-word;
+      hyphens: auto;
       max-width: 100%;
     }
 
@@ -220,14 +220,14 @@
       left: 0;
       right: 100%;
       bottom: 0;
-      background: rgba(52, 152, 219, 0.15);
+      background: rgba(26,115,232,0.15);
       height: 100%;
       transition: right 0.3s ease;
     }
 
     .task-text a:hover {
-      color: #ff69b4;
-      border-bottom: 1px solid rgba(255, 105, 180, 0.7);
+      color: #ff4081;
+      border-bottom: 1px solid rgba(255,64,129,0.7);
     }
 
     .task-text a:hover::before {
@@ -242,7 +242,7 @@
     }
 
     .footer span {
-      background: linear-gradient(45deg, #ff69b4, #3498db);
+      background: linear-gradient(45deg, #ff4081, #1a73e8);
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
@@ -370,7 +370,7 @@
       </li>
     </ul>
     <div class="footer">
-      
+      <span>Legacy Link</span>
     </div>
   </div>
 </body>
